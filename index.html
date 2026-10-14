@@ -1,0 +1,538 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FocusFlow — AI-Powered Attention Assessment</title>
+  <meta name="description" content="FocusFlow is an AI-powered attention assessment app. Discover how your attention works through camera-guided assessments, attention archetypes, and personalized insights.">
+  <link rel="canonical" href="https://valerie-joy.github.io/focus_flowweb/">
+  <meta name="theme-color" content="#FBF9FA">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="FocusFlow">
+  <meta property="og:title" content="FocusFlow — Understand Your Attention. Unlock Your Potential.">
+  <meta property="og:description" content="AI-powered attention assessments, personalized insights, and a smarter approach to understanding focus.">
+  <meta property="og:url" content="https://valerie-joy.github.io/focus_flowweb/">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="assets/fonts/sora-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/figtree-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <script>
+    /* Apply the saved or system theme before first paint to avoid a flash. */
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem("focusflow-theme"); } catch (e) {}
+      if (t !== "light" && t !== "dark") {
+        t = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      }
+      document.documentElement.setAttribute("data-theme", t);
+    })();
+  </script>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body id="top">
+  <!-- Icon sprite (Lucide icons, ISC licence) -->
+  <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+    <symbol id="i-sparkles" viewBox="0 0 24 24"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/><path d="M20 3v4"/><path d="M22 5h-4"/></symbol>
+    <symbol id="i-camera" viewBox="0 0 24 24"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="i-activity" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></symbol>
+    <symbol id="i-compass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></symbol>
+    <symbol id="i-layers" viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></symbol>
+    <symbol id="i-lightbulb" viewBox="0 0 24 24"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></symbol>
+    <symbol id="i-file-text" viewBox="0 0 24 24"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><line x1="10" x2="8" y1="9" y2="9"/></symbol>
+    <symbol id="i-shield-check" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></symbol>
+    <symbol id="i-user-plus" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" x2="19" y1="8" y2="14"/><line x1="22" x2="16" y1="11" y2="11"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+    <symbol id="i-scan-face" viewBox="0 0 24 24"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01"/><path d="M15 9h.01"/></symbol>
+    <symbol id="i-smartphone" viewBox="0 0 24 24"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+    <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
+    <symbol id="i-upload" viewBox="0 0 24 24"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M12 12v9"/><path d="m16 16-4-4-4 4"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></symbol>
+    <symbol id="i-zap" viewBox="0 0 24 24"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></symbol>
+    <symbol id="i-gamepad" viewBox="0 0 24 24"><line x1="6" x2="10" y1="11" y2="11"/><line x1="8" x2="8" y1="9" y2="13"/><line x1="15" x2="15.01" y1="12" y2="12"/><line x1="18" x2="18.01" y1="10" y2="10"/><path d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59c-.006.052-.01.101-.017.152C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.545-.604-6.584-.685-7.258-.007-.05-.011-.1-.017-.151A4 4 0 0 0 17.32 5z"/></symbol>
+    <symbol id="i-list" viewBox="0 0 24 24"><path d="M3 12h.01"/><path d="M3 18h.01"/><path d="M3 6h.01"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M8 6h13"/></symbol>
+    <symbol id="i-move" viewBox="0 0 24 24"><path d="M12 2v20"/><path d="m15 19-3 3-3-3"/><path d="m19 9 3 3-3 3"/><path d="M2 12h20"/><path d="m5 9-3 3 3 3"/><path d="m9 5 3-3 3 3"/></symbol>
+  </svg>
+
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <div class="ambient" aria-hidden="true"><span></span><span></span></div>
+
+  <header class="site-header">
+    <nav class="nav container" aria-label="Main">
+      <a class="brand" href="#top" aria-label="FocusFlow home">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span class="brand-word">FocusFlow</span>
+      </a>
+      <ul class="nav-links" id="primary-nav">
+        <li><a href="#top">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#how">How It Works</a></li>
+        <li><a href="privacy.html">Privacy Policy</a></li>
+      </ul>
+      <div class="nav-actions">
+        <button class="icon-btn theme-toggle" type="button" data-theme-toggle aria-pressed="false" aria-label="Switch to dark mode">
+          <svg class="icon icon-moon" aria-hidden="true"><use href="#i-moon"/></svg>
+          <svg class="icon icon-sun" aria-hidden="true"><use href="#i-sun"/></svg>
+        </button>
+        <button class="icon-btn nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" aria-label="Open menu">
+          <svg class="icon icon-menu" aria-hidden="true"><use href="#i-menu"/></svg>
+          <svg class="icon icon-close" aria-hidden="true"><use href="#i-x"/></svg>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main">
+    <!-- ============ Hero ============ -->
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <p class="hero-tag" data-seq style="--i:0">
+            <span class="dot" aria-hidden="true"><svg class="icon"><use href="#i-sparkles"/></svg></span>
+            AI-powered attention assessment
+          </p>
+          <h1 id="hero-title" data-seq style="--i:1">
+            <span class="line">Understand Your Attention.</span>
+            <span class="line">Unlock Your Potential.</span>
+          </h1>
+          <p class="hero-lead" data-seq style="--i:2">
+            Discover how your attention works through AI-powered assessments, personalized insights, and a smarter approach to understanding focus.
+          </p>
+          <div class="hero-actions" data-seq style="--i:3">
+            <a class="btn btn-primary" href="#about">Explore FocusFlow</a>
+            <a class="btn btn-ghost" href="#how">See how it works</a>
+          </div>
+          <p class="hero-note" data-seq style="--i:4">
+            <svg class="icon" aria-hidden="true"><use href="#i-info"/></svg>
+            <span>FocusFlow describes attention patterns. It is not a diagnostic tool and doesn't replace assessment by a qualified professional.</span>
+          </p>
+        </div>
+
+        <div class="hero-visual" aria-hidden="true">
+          <div class="stage-ring"></div>
+          <div class="stage-ring inner"></div>
+          <div class="stage-orbit"></div>
+          <div class="orb"><span></span></div>
+
+          <div class="float-card fc-focus" style="--i:0">
+            <span class="chip-icon"><svg class="icon"><use href="#i-eye"/></svg></span>
+            <span><span class="label">Focus</span><strong>85%</strong></span>
+            <span class="meter" style="--v:85%"><i></i></span>
+          </div>
+          <div class="float-card fc-arch" style="--i:1">
+            <span class="chip-icon"><svg class="icon"><use href="#i-compass"/></svg></span>
+            <span><span class="label">Attention archetype</span><strong>Toy Tornado</strong></span>
+          </div>
+          <div class="float-card fc-cal" style="--i:2">
+            <span class="chip-icon"><svg class="icon"><use href="#i-scan-face"/></svg></span>
+            <span><span class="label">Calibration quality</span><strong>92%</strong></span>
+          </div>
+          <p class="hero-caption">Sample values from the app design</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ What is FocusFlow ============ -->
+    <section class="section" id="about" aria-labelledby="about-title">
+      <div class="container about-grid">
+        <div class="about-copy">
+          <h2 id="about-title">What is FocusFlow?</h2>
+          <p class="lede">FocusFlow is a mobile app that helps you see how your attention actually behaves, not just how it feels.</p>
+          <p>Through a short, camera-guided assessment built around content you enjoy, FocusFlow looks at signals such as how long your gaze holds, when it drifts, and how engagement changes between formats. It turns those signals into an attention profile you can understand and act on.</p>
+          <p>Knowing your patterns can help you pick formats that keep you engaged, plan work in sizes that suit you, and have better-informed conversations, including with a healthcare professional if you decide to seek one.</p>
+        </div>
+
+        <div class="compare">
+          <div class="yes">
+            <h3>FocusFlow helps you</h3>
+            <ul>
+              <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Notice when and how your attention shifts</li>
+              <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Compare your engagement across types of content</li>
+              <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Get practical suggestions matched to your pattern</li>
+              <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Bring a clearer picture to a conversation with a professional</li>
+            </ul>
+          </div>
+          <div class="no">
+            <h3>FocusFlow does not</h3>
+            <ul>
+              <li><svg class="icon" aria-hidden="true"><use href="#i-minus"/></svg>Diagnose ADHD or any other condition</li>
+              <li><svg class="icon" aria-hidden="true"><use href="#i-minus"/></svg>Replace evaluation by a qualified clinician</li>
+              <li><svg class="icon" aria-hidden="true"><use href="#i-minus"/></svg>Recommend, start, or change any medication</li>
+              <li><svg class="icon" aria-hidden="true"><use href="#i-minus"/></svg>Treat one session as a definitive measure of you</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ Features ============ -->
+    <section class="section" id="features" aria-labelledby="features-title">
+      <div class="container">
+        <div class="section-head">
+          <h2 id="features-title">Everything in one assessment</h2>
+          <p>From calibration to your final report, each part of FocusFlow is designed to make attention easier to see and easier to talk about.</p>
+        </div>
+
+        <div class="features-grid">
+          <article class="feature feature--lead">
+            <span class="feature-icon" aria-hidden="true"><svg class="icon"><use href="#i-sparkles"/></svg></span>
+            <h3>AI-powered attention assessment</h3>
+            <p>A guided session uses AI to turn what happens while you watch content into a picture of how your attention behaves: where it holds, where it drifts, and how it moves between formats.</p>
+            <div class="gaze-viz" aria-hidden="true">
+              <svg viewBox="0 0 400 200" preserveAspectRatio="xMidYMid slice">
+                <path class="path" d="M60 120 C 90 70, 130 60, 160 80 S 220 140, 250 110 S 300 40, 330 70 S 350 150, 300 160"/>
+                <circle class="fix" cx="60" cy="120" r="10"/>
+                <circle class="fix" cx="160" cy="80" r="18"/>
+                <circle class="fix" cx="250" cy="110" r="13"/>
+                <circle class="fix" cx="330" cy="70" r="22"/>
+                <circle class="fix" cx="300" cy="160" r="8"/>
+              </svg>
+              <div class="legend"><span><i></i>Fixation</span><span><i class="dash"></i>Gaze path</span></div>
+            </div>
+          </article>
+
+          <article class="feature">
+            <span class="feature-icon" aria-hidden="true"><svg class="icon"><use href="#i-camera"/></svg></span>
+            <h3>Camera-based attention tracking</h3>
+            <p>With your permission, your device's front camera is used to estimate where you're looking during the assessment.</p>
+          </article>
+
+          <article class="feature">
+            <span class="feature-icon" aria-hidden="true"><svg class="icon"><use href="#i-activity"/></svg></span>
+            <h3>Personalized attention insights</h3>
+            <p>Results are framed around your own patterns and the content you said you enjoy, not a one-size-fits-all score.</p>
+          </article>
+
+          <article class="feature">
+            <span class="feature-icon" aria-hidden="true"><svg class="icon"><use href="#i-compass"/></svg></span>
+            <h3>Attention archetype identification</h3>
+            <p>Your results are summarized as an archetype: a memorable, plain-language description of your attention style.</p>
+          </article>
+
+          <article class="feature">
+            <span class="feature-icon" aria-hidden="true"><svg class="icon"><use href="#i-layers"/></svg></span>
+            <h3>Interactive assessment experiences</h3>
+            <p>The assessment draws on genres you choose, from music and gaming to finance and sci-fi, so it feels like content, not a test.</p>
+          </article>
+
+          <article class="feature">
+            <span class="feature-icon" aria-hidden="true"><svg class="icon"><use href="#i-lightbulb"/></svg></span>
+            <h3>Personalized recommendations</h3>
+            <p>Practical suggestions, such as content formats, task sizes, and movement breaks, matched to how you focus.</p>
+          </article>
+
+          <article class="feature">
+            <span class="feature-icon" aria-hidden="true"><svg class="icon"><use href="#i-shield-check"/></svg></span>
+            <h3>Privacy-conscious design</h3>
+            <p>Camera access and document uploads are explained before they're requested, and uploading a document is optional.</p>
+          </article>
+
+          <article class="feature feature--wide">
+            <div class="feature-body">
+              <span class="feature-icon" aria-hidden="true"><svg class="icon"><use href="#i-file-text"/></svg></span>
+              <h3>Assessment reports</h3>
+              <p>A detailed report brings your results together in one place and is sent to the email address you register with.</p>
+            </div>
+            <div class="report-sketch" aria-hidden="true">
+              <div><svg class="icon"><use href="#i-check"/></svg>Assessment summary</div>
+              <div><svg class="icon"><use href="#i-check"/></svg>Attention metrics</div>
+              <div><svg class="icon"><use href="#i-check"/></svg>Archetype insights</div>
+              <div><svg class="icon"><use href="#i-check"/></svg>Recommendations</div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ How it works ============ -->
+    <section class="section" id="how" aria-labelledby="how-title">
+      <div class="container how-grid">
+        <div class="how-intro">
+          <h2 id="how-title">How FocusFlow works</h2>
+          <p>Six steps take you from a new profile to a personalized picture of your attention. Everything happens in the FocusFlow mobile app.</p>
+        </div>
+
+        <ol class="steps">
+          <li class="step">
+            <span class="step-num" aria-hidden="true"></span>
+            <div class="step-body">
+              <h3>Create your profile</h3>
+              <p>Tell FocusFlow your name, age, and email. You'll also be asked whether you have an official ADHD diagnosis; uploading a supporting document is optional.</p>
+              <ul class="chips" aria-label="Profile details">
+                <li>Name</li><li>Age</li><li>Email</li><li>Diagnosis status</li><li>Optional document</li>
+              </ul>
+            </div>
+          </li>
+          <li class="step">
+            <span class="step-num" aria-hidden="true"></span>
+            <div class="step-body">
+              <h3>Select your interests</h3>
+              <p>Pick the content genres you enjoy so the assessment uses material you'd actually choose to watch.</p>
+              <ul class="chips" aria-label="Example genres">
+                <li>Drama</li><li>Music</li><li>Gaming</li><li>Animation</li><li>Finance</li><li>Sci-Fi</li><li>Education</li>
+              </ul>
+            </div>
+          </li>
+          <li class="step">
+            <span class="step-num" aria-hidden="true"></span>
+            <div class="step-body">
+              <h3>Enable and calibrate your camera</h3>
+              <p>Allow camera access, then follow a moving dot with your eyes. Calibration helps the app read your gaze for your device and seating position.</p>
+            </div>
+          </li>
+          <li class="step">
+            <span class="step-num" aria-hidden="true"></span>
+            <div class="step-body">
+              <h3>Complete the attention assessment</h3>
+              <p>Watch a series of content segments while the app tracks attention signals such as fixation time, focus, and moments of looking away.</p>
+            </div>
+          </li>
+          <li class="step">
+            <span class="step-num" aria-hidden="true"></span>
+            <div class="step-body">
+              <h3>Analyze attention patterns</h3>
+              <p>The app processes your session, comparing engagement across genres and detecting patterns over time.</p>
+            </div>
+          </li>
+          <li class="step">
+            <span class="step-num" aria-hidden="true"></span>
+            <div class="step-body">
+              <h3>Discover your results and recommendations</h3>
+              <p>See your attention archetype and personalized recommendations, then receive a detailed report by email.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ============ App preview ============ -->
+    <section class="section" id="preview" aria-labelledby="preview-heading">
+      <div class="container">
+        <div class="section-head">
+          <h2 id="preview-heading">A look inside the app</h2>
+          <p>Step through the main screens of the FocusFlow mobile experience.</p>
+        </div>
+
+        <div class="preview-band">
+          <div class="preview">
+            <div class="preview-tabs" role="tablist" aria-label="App screens">
+              <button class="preview-tab" role="tab" id="tab-welcome" aria-controls="screen-welcome" aria-selected="true" tabindex="0"
+                data-title="Welcome"
+                data-text="The first screen introduces FocusFlow and offers two ways in: start registration, or learn more first.">
+                <svg class="icon" aria-hidden="true"><use href="#i-smartphone"/></svg>Welcome
+              </button>
+              <button class="preview-tab" role="tab" id="tab-register" aria-controls="screen-register" aria-selected="false" tabindex="-1"
+                data-title="Registration"
+                data-text="A short onboarding asks for your name, age, and email, whether you have an official ADHD diagnosis, and, only if you choose, a supporting document.">
+                <svg class="icon" aria-hidden="true"><use href="#i-user-plus"/></svg>Registration
+              </button>
+              <button class="preview-tab" role="tab" id="tab-calibrate" aria-controls="screen-calibrate" aria-selected="false" tabindex="-1"
+                data-title="Camera calibration"
+                data-text="Before the assessment, you follow a moving dot with your eyes so the app can calibrate to your camera and position.">
+                <svg class="icon" aria-hidden="true"><use href="#i-scan-face"/></svg>Camera calibration
+              </button>
+              <button class="preview-tab" role="tab" id="tab-assess" aria-controls="screen-assess" aria-selected="false" tabindex="-1"
+                data-title="Assessment progress"
+                data-text="While you watch, the app tracks attention signals such as fixation time, focus, and looking away, and shows how far through the session you are.">
+                <svg class="icon" aria-hidden="true"><use href="#i-eye"/></svg>Assessment progress
+              </button>
+              <button class="preview-tab" role="tab" id="tab-analysis" aria-controls="screen-analysis" aria-selected="false" tabindex="-1"
+                data-title="Attention analysis"
+                data-text="After the session, the app works through your results step by step, comparing genres, detecting patterns, and computing your archetype.">
+                <svg class="icon" aria-hidden="true"><use href="#i-activity"/></svg>Attention analysis
+              </button>
+              <button class="preview-tab" role="tab" id="tab-results" aria-controls="screen-results" aria-selected="false" tabindex="-1"
+                data-title="Results"
+                data-text="Your attention archetype describes your pattern in plain language and shows how confident the analysis is.">
+                <svg class="icon" aria-hidden="true"><use href="#i-compass"/></svg>Results
+              </button>
+              <button class="preview-tab" role="tab" id="tab-recs" aria-controls="screen-recs" aria-selected="false" tabindex="-1"
+                data-title="Personalized recommendations"
+                data-text="Recommendations suggest formats and habits that fit your pattern, like short interactive content or breaking work into small tasks.">
+                <svg class="icon" aria-hidden="true"><use href="#i-lightbulb"/></svg>Recommendations
+              </button>
+            </div>
+
+            <div class="phone">
+              <div class="phone-screen">
+                <div class="status-bar" aria-hidden="true"><span>9:41</span><span class="bars"><i></i><i></i><i></i><span class="batt"></span></span></div>
+
+                <!-- Welcome -->
+                <div class="screen s-welcome is-entering" role="tabpanel" id="screen-welcome" aria-labelledby="tab-welcome">
+                  <div class="s-word">FocusFlow</div>
+                  <p class="s-sub">Understand your attention.<br>Unlock your potential.</p>
+                  <div class="s-orb" aria-hidden="true"><div class="orb"><span></span></div></div>
+                  <span class="s-btn">Get Started</span>
+                  <span class="s-btn-ghost">Learn More</span>
+                </div>
+
+                <!-- Registration -->
+                <div class="screen" role="tabpanel" id="screen-register" aria-labelledby="tab-register" hidden>
+                  <p class="s-title">Let's get to <em>know</em> you better.</p>
+                  <p class="s-sub">A few details help tailor your assessment.</p>
+                  <p class="s-label">What should we call you?</p>
+                  <div class="s-input"><span>Your full name</span><svg class="icon" aria-hidden="true"><use href="#i-user"/></svg></div>
+                  <p class="s-label">Where should we send your report?</p>
+                  <div class="s-input"><span>youremail@example.com</span><svg class="icon" aria-hidden="true"><use href="#i-mail"/></svg></div>
+                  <p class="s-label">Do you have an official ADHD diagnosis?</p>
+                  <div class="s-input"><span>Yes, upload document (optional)</span><svg class="icon" aria-hidden="true"><use href="#i-upload"/></svg></div>
+                  <div class="s-input"><span>No, continue assessment</span><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></div>
+                  <span class="s-btn">Continue</span>
+                  <div class="s-progress" aria-hidden="true"><i style="--v:40%"></i></div>
+                </div>
+
+                <!-- Calibration -->
+                <div class="screen" role="tabpanel" id="screen-calibrate" aria-labelledby="tab-calibrate" hidden>
+                  <p class="s-title">Let's calibrate your camera</p>
+                  <p class="s-sub">Follow the moving dot with your eyes.</p>
+                  <div class="s-ring" aria-hidden="true"><span class="target"></span></div>
+                  <div class="s-metric"><span>Calibration quality</span><strong>92%</strong></div>
+                  <span class="s-btn">Continue</span>
+                </div>
+
+                <!-- Assessment -->
+                <div class="screen" role="tabpanel" id="screen-assess" aria-labelledby="tab-assess" hidden>
+                  <p class="s-title">Assessment in progress</p>
+                  <p class="s-sub">We're looking at your attention across different content.</p>
+                  <span class="s-live">Live tracking</span>
+                  <div class="s-feed" aria-hidden="true"><span class="reticle"></span></div>
+                  <div class="s-stats">
+                    <div><span>Fixation</span><strong>1.24s</strong></div>
+                    <div><span>Focus</span><strong>85%</strong></div>
+                    <div><span>Looking away</span><strong>2.1%</strong></div>
+                  </div>
+                  <div class="s-row"><span>Progress</span><span>6 / 12</span></div>
+                  <div class="s-progress" aria-hidden="true"><i style="--v:50%"></i></div>
+                </div>
+
+                <!-- Analysis -->
+                <div class="screen" role="tabpanel" id="screen-analysis" aria-labelledby="tab-analysis" hidden>
+                  <p class="s-title">Analyzing your attention patterns</p>
+                  <p class="s-sub">This may take a few moments.</p>
+                  <ul class="s-list">
+                    <li><span class="tick"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></span>Processing sequences<span class="ok"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></span></li>
+                    <li><span class="tick"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></span>Calculating engagement<span class="ok"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></span></li>
+                    <li><span class="tick"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></span>Comparing genres<span class="ok"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></span></li>
+                    <li><span class="tick"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></span>Detecting patterns<span class="ok"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></span></li>
+                    <li><span class="tick"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></span>Computing archetype<span class="ok"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></span></li>
+                    <li><span class="tick"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></span>Generating insights<span class="ok"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></span></li>
+                  </ul>
+                  <div class="s-row"><span>Progress</span><span>100%</span></div>
+                  <div class="s-progress" aria-hidden="true"><i style="--v:100%"></i></div>
+                </div>
+
+                <!-- Results -->
+                <div class="screen s-arch" role="tabpanel" id="screen-results" aria-labelledby="tab-results" hidden>
+                  <p class="s-title">Your attention archetype</p>
+                  <div class="s-orb" aria-hidden="true"><div class="orb"><span></span></div></div>
+                  <p class="name">Toy Tornado</p>
+                  <p class="s-sub">High energy, easily excited, but attention can shift quickly.</p>
+                  <div class="s-metric"><span>Confidence</span><strong>89%</strong></div>
+                </div>
+
+                <!-- Recommendations -->
+                <div class="screen" role="tabpanel" id="screen-recs" aria-labelledby="tab-recs" hidden>
+                  <p class="s-title">Recommended for you</p>
+                  <p class="s-sub">Based on your attention profile.</p>
+                  <ul class="s-recs">
+                    <li><span class="ri"><svg class="icon" aria-hidden="true"><use href="#i-zap"/></svg></span><span><strong>Short, interactive content</strong><span>Keeps engagement high</span></span></li>
+                    <li><span class="ri"><svg class="icon" aria-hidden="true"><use href="#i-gamepad"/></svg></span><span><strong>Gamified learning</strong><span>Supports focus retention</span></span></li>
+                    <li><span class="ri"><svg class="icon" aria-hidden="true"><use href="#i-list"/></svg></span><span><strong>Break work into small tasks</strong><span>Helps maintain momentum</span></span></li>
+                    <li><span class="ri"><svg class="icon" aria-hidden="true"><use href="#i-move"/></svg></span><span><strong>Movement-based activities</strong><span>Channel your energy</span></span></li>
+                  </ul>
+                  <span class="s-btn">View Full Plan</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="preview-detail" aria-live="polite">
+              <h3 id="preview-title">Welcome</h3>
+              <p id="preview-text">The first screen introduces FocusFlow and offers two ways in: start registration, or learn more first.</p>
+              <p class="disclaimer">
+                <svg class="icon" aria-hidden="true"><use href="#i-info"/></svg>
+                <span>Illustrative previews with sample values. The assessment runs in the FocusFlow mobile app, not on this website.</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ Privacy & trust ============ -->
+    <section class="section" id="trust" aria-labelledby="trust-title">
+      <div class="container trust">
+        <div class="trust-copy">
+          <h2 id="trust-title">Designed around consent</h2>
+          <p>FocusFlow involves sensitive things: your camera and, if you choose to share it, information about an ADHD diagnosis. The app is designed to ask clearly, explain why, and keep you informed about what happens with your information.</p>
+          <a class="btn btn-primary" href="privacy.html">Read the privacy policy</a>
+        </div>
+        <ul class="trust-list">
+          <li>
+            <svg class="icon" aria-hidden="true"><use href="#i-camera"/></svg>
+            <h3>Permission first</h3>
+            <p>Camera access is requested with an explanation of why it's needed before the assessment begins.</p>
+          </li>
+          <li>
+            <svg class="icon" aria-hidden="true"><use href="#i-upload"/></svg>
+            <h3>Optional documents</h3>
+            <p>Uploading a diagnosis document is optional. You can continue the assessment without one.</p>
+          </li>
+          <li>
+            <svg class="icon" aria-hidden="true"><use href="#i-info"/></svg>
+            <h3>Clear about limits</h3>
+            <p>Results describe attention patterns and are presented as insights, not as a medical diagnosis.</p>
+          </li>
+          <li>
+            <svg class="icon" aria-hidden="true"><use href="#i-file-text"/></svg>
+            <h3>A published policy</h3>
+            <p>The privacy policy sets out what information is collected and how it's used, so you can decide with the full picture.</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-about">
+        <a class="brand" href="#top" aria-label="FocusFlow home">
+          <span class="brand-mark" aria-hidden="true"></span>
+          <span class="brand-word">FocusFlow</span>
+        </a>
+        <p>An AI-powered attention assessment app that helps you understand how your attention works through interactive assessments and personalized insights.</p>
+      </div>
+      <div>
+        <h2>Explore</h2>
+        <ul class="footer-links">
+          <li><a href="#about">About FocusFlow</a></li>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#how">How it works</a></li>
+          <li><a href="#preview">App preview</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2>Legal &amp; contact</h2>
+        <ul class="footer-links">
+          <li><a href="privacy.html">Privacy Policy</a></li>
+          <li><span class="placeholder">Contact email to be added</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="container">
+      <div class="footer-base">
+        <p>&copy; <span data-year>2026</span> FocusFlow. All rights reserved.</p>
+        <p>FocusFlow is an attention assessment tool and is not a substitute for professional medical diagnosis.</p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
